@@ -3,7 +3,6 @@ import {createI18n} from "vue-i18n";
 import {isDev} from "../lib/env";
 import enUS from "./en-US.json";
 import zhCN from "./zh-CN.json";
-import jaJP from "./ja-JP.json";
 
 let localeInit = false;
 export const defaultLocale = "zh-CN";
@@ -18,11 +17,6 @@ export const messageList = [
         name: "zh-CN",
         label: "简体中文",
         messages: zhCN,
-    },
-    {
-        name: "ja-JP",
-        label: "日本語",
-        messages: jaJP,
     },
 ];
 

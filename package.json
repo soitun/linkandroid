@@ -4,6 +4,7 @@
     "main": "dist-electron/main/index.js",
     "description": "Link android to PC easily",
     "author": "ModStartLib",
+    "homepage": "https://linkandroid.com",
     "license": "Apache-2.0",
     "private": true,
     "keywords": [

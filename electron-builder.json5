@@ -59,7 +59,8 @@
             "zh-CN",
             "en-US",
             "zh-TW"
-        ]
+        ],
+        "artifactName": "${productName}-${version}-win-appx-${arch}.${ext}",
     },
     "mac": {
         "icon": "logo.icns",
@@ -69,7 +70,7 @@
                 "arch": [
                     "x64",
                     "arm64"
-                ]
+                ],
             }
         ],
         "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
@@ -87,8 +88,7 @@
         "entitlementsInherit": "./entitlements.mac.plist",
         "entitlements": "./entitlements.mac.plist",
         "extendInfo": {
-            "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder.",
-            "NSDownloadsFolderUsageDescription": "Application requests access to the user's Downloads folder."
+            "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder."
         },
         "type": "development",
         "notarize": false,
@@ -98,7 +98,6 @@
     },
     "linux": {
         "icon": "logo.icns",
-        "desktop": "logo",
         "maintainer": "LinkAndroid",
         "category": "Utility",
         "target": [

@@ -216,10 +216,10 @@ const request = async (option: {
 const getNetworkInterfaces = () => {
     const interfaces = os.networkInterfaces();
     const result: Array<{ name: string; address: string; family: string; internal: boolean }> = [];
-
+    
     for (const [name, addresses] of Object.entries(interfaces)) {
         if (!addresses) continue;
-
+        
         for (const addr of addresses) {
             // Filter out internal (loopback) addresses and only include IPv4
             if (!addr.internal && addr.family === 'IPv4') {
@@ -232,7 +232,7 @@ const getNetworkInterfaces = () => {
             }
         }
     }
-
+    
     return result;
 };
 

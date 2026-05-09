@@ -18,6 +18,7 @@ const doSelectFile = async () => {
     if (!result) {
         return;
     }
+    console.log('result', result);
     const files = Array.isArray(result) ? result : [result];
     const validFiles: string[] = [];
     for (const file of files) {
