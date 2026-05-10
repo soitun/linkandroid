@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import FeedbackTicketButton from "../components/common/FeedbackTicketButton.vue";
-import UpdaterButton from "../components/common/UpdaterButton.vue";
-import {AppConfig} from "../config";
-import {t} from "../lang";
-import {useSettingStore} from "../store/modules/setting";
+import {ref} from 'vue'
+import FeedbackTicketButton from '../components/common/FeedbackTicketButton.vue'
+import UpdaterButton from '../components/common/UpdaterButton.vue'
+import {AppConfig} from '../config'
+import {t} from '../lang'
+import {useSettingStore} from '../store/modules/setting'
 
-const setting = useSettingStore();
-const licenseYear = new Date().getFullYear();
-const devSettingVisible = ref(false);
+const setting = useSettingStore()
+const licenseYear = new Date().getFullYear()
+const devSettingVisible = ref(false)
 
 const doOpenLog = async () => {
-    await window.$mapi.app.openPath(window.$mapi.log.root());
-};
-let clickTimes = 0;
-let clickLastTime = 0;
+    await window.$mapi.app.openPath(window.$mapi.log.root())
+}
+let clickTimes = 0
+let clickLastTime = 0
 const doDevSettingTriggerClick = () => {
     // click more than 5 times in 3 seconds
-    const now = new Date().getTime();
+    const now = new Date().getTime()
     if (0 === clickLastTime) {
-        clickLastTime = now;
+        clickLastTime = now
     }
     if (now - clickLastTime < 3000) {
-        clickTimes++;
+        clickTimes++
         if (clickTimes >= 5) {
-            devSettingVisible.value = true;
-            clickTimes = 0;
+            devSettingVisible.value = true
+            clickTimes = 0
         }
     } else {
-        clickTimes = 0;
+        clickTimes = 0
     }
-};
+}
 </script>
 
 <template>
@@ -47,7 +47,7 @@ const doDevSettingTriggerClick = () => {
                 </div>
             </div>
             <div class="flex mb-3 items-center">
-                <div class="w-20">{{ t("page.about.version") }}</div>
+                <div class="w-20">{{ t('page.about.version') }}</div>
                 <div class="flex-grow">
                     <div class="inline-block">v{{ AppConfig.version }} Build {{ setting.buildInfo.buildId }}</div>
                 </div>
@@ -56,7 +56,7 @@ const doDevSettingTriggerClick = () => {
                 </div>
             </div>
             <div class="flex mb-3 items-center">
-                <div class="w-20">{{ t("page.about.website") }}</div>
+                <div class="w-20">{{ t('page.about.website') }}</div>
                 <div class="flex-grow">
                     <a :href="AppConfig.website" target="_blank" class="text-link">
                         {{ AppConfig.website }}
@@ -70,14 +70,14 @@ const doDevSettingTriggerClick = () => {
                         <template #icon>
                             <icon-file />
                         </template>
-                        {{ t("page.about.log") }}
+                        {{ t('page.about.log') }}
                     </a-button>
                 </div>
             </div>
             <div class="flex mb-3 items-center">
-                <div class="w-20">{{ t("page.about.disclaimer") }}</div>
+                <div class="w-20">{{ t('page.about.disclaimer') }}</div>
                 <div class="flex-grow">
-                    {{ t("page.about.license") }}
+                    {{ t('page.about.license') }}
                 </div>
             </div>
             <div class="mb-3 mt-6 flex items-center">
@@ -101,7 +101,7 @@ const doDevSettingTriggerClick = () => {
             <div v-if="devSettingVisible" class="bg-gray-100 p-3 rounded-lg">
                 <div class="flex mb-4 items-center">
                     <icon-code class="mr-2" />
-                    {{ t("common.developerSettings") }}
+                    {{ t('common.developerSettings') }}
                 </div>
                 <div class="flex mb-4">
                     <div class="flex-grow">Test</div>

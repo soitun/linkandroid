@@ -9,6 +9,9 @@ import {AppConfig} from "./src/config";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import Icons from "unplugin-icons/vite";
+import Components from "unplugin-vue-components/vite";
+import IconsResolver from "unplugin-icons/resolver";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -22,6 +25,8 @@ export default defineConfig(({command}) => {
     const sourcemap = isServe || !!process.env.VSCODE_DEBUG;
     const minify = isBuild && !process.env.VSCODE_DEBUG;
 
+    const buildId = dayjs().tz("Asia/Shanghai").format("YYYYMMDDHHmmss");
+
     const externalPackages = [
         ...Object.keys("dependencies" in pkg ? pkg.dependencies : {}),
         ...Object.keys("devDependencies" in pkg ? pkg.devDependencies : {}),
@@ -30,6 +35,11 @@ export default defineConfig(({command}) => {
 
     return {
         plugins: [
+            Icons({compiler: "vue3"}),
+            Components({
+                dts: "src/components.d.ts",
+                resolvers: [IconsResolver({prefix: "i"})],
+            }),
             vue({
                 template: {
                     compilerOptions: {
@@ -45,7 +55,6 @@ export default defineConfig(({command}) => {
             {
                 name: "add-build-time",
                 generateBundle() {
-                    const buildId = dayjs().tz("Asia/Shanghai").format("YYYYMMDDHHmmss");
                     this.emitFile({
                         type: "asset",
                         fileName: "build.json",
@@ -111,6 +120,9 @@ export default defineConfig(({command}) => {
                                 external: externalPackages,
                             },
                         },
+                        define: {
+                            __BUILD_ID__: JSON.stringify(buildId),
+                        },
                     },
                 },
                 {
@@ -161,6 +173,9 @@ export default defineConfig(({command}) => {
                     log: path.resolve(__dirname, "page/log.html"),
                 },
             },
+        },
+        define: {
+            __BUILD_ID__: JSON.stringify(buildId),
         },
         server:
             process.env.VSCODE_DEBUG &&

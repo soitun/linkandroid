@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import {computed} from "vue";
-import {useRouter} from "vue-router";
-import {t} from "../lang";
-import {useSettingStore} from "../store/modules/setting";
-import {useUserStore} from "../store/modules/user";
-import {Package} from "lucide-vue-next";
+import {computed} from 'vue'
+import {useRouter} from 'vue-router'
+import {t} from '../lang'
+import {useSettingStore} from '../store/modules/setting'
+import {useUserStore} from '../store/modules/user'
+import {Package} from 'lucide-vue-next'
 
-const route = useRouter();
-const user = useUserStore();
-const setting = useSettingStore();
+const route = useRouter()
+const user = useUserStore()
+const setting = useSettingStore()
 
 const activeTab = computed(() => {
     switch (route.currentRoute.value.path) {
-        case "/home":
-            return "home";
-        case "/device":
-            return "device";
-        case "/script":
-            return "script";
-        case "/lib":
-            return "lib";
-        case "/setting":
-            return "setting";
+        case '/home':
+            return 'home'
+        case '/device':
+            return 'device'
+        case '/script':
+            return 'script'
+        case '/lib':
+            return 'lib'
+        case '/setting':
+            return 'setting'
     }
-});
+})
 
 const userTip = computed(() => {
-    return user.user.id ? user.user.name : t("common.notLoggedIn");
-});
+    return user.user.id ? user.user.name : t('common.notLoggedIn')
+})
 
 const doUser = async () => {
     if (!setting.basic.userEnable) {
-        return;
+        return
     }
-    await window.$mapi.user.open();
-};
+    await window.$mapi.user.open()
+}
 </script>
 
 <template>
@@ -73,9 +73,9 @@ const doUser = async () => {
                 href="javascript:;"
             >
                 <div>
-                    <icon-mobile class="text-xl"/>
+                    <icon-mobile class="text-xl" />
                 </div>
-                <div class="text-sm">{{ $t("nav.device") }}</div>
+                <div class="text-sm">{{ $t('nav.device') }}</div>
             </a>
             <a
                 class="page-nav-item block text-center py-3"
@@ -84,9 +84,9 @@ const doUser = async () => {
                 href="javascript:;"
             >
                 <div>
-                    <icon-code class="text-xl"/>
+                    <icon-code class="text-xl" />
                 </div>
-                <div class="text-sm">{{ $t("nav.script") }}</div>
+                <div class="text-sm">{{ $t('nav.script') }}</div>
             </a>
             <a
                 v-if="0"
@@ -96,9 +96,9 @@ const doUser = async () => {
                 href="javascript:;"
             >
                 <div>
-                    <Package class="w-5 h-5 mx-auto"/>
+                    <Package class="w-5 h-5 mx-auto" />
                 </div>
-                <div class="text-sm">{{ $t("nav.lib") }}</div>
+                <div class="text-sm">{{ $t('nav.lib') }}</div>
             </a>
             <a
                 class="page-nav-item block text-center py-3"
@@ -107,9 +107,9 @@ const doUser = async () => {
                 href="javascript:;"
             >
                 <div>
-                    <icon-settings class="text-xl"/>
+                    <icon-settings class="text-xl" />
                 </div>
-                <div class="text-sm">{{ $t("nav.setting") }}</div>
+                <div class="text-sm">{{ $t('nav.setting') }}</div>
             </a>
         </div>
         <div></div>

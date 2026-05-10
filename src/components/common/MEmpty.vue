@@ -9,13 +9,13 @@
                 />
             </div>
             <div class="text-center text-sm">
-                {{ text || $t("empty.noRecord") }}
+                {{ text || $t('empty.noRecord') }}
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-    text?: string;
-}>();
+    text?: string
+}>()
 </script>

@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import {nextTick, ref} from "vue";
+import {nextTick, ref} from 'vue'
 
 const props = defineProps<{
-    value: string | null | undefined;
-    onChangeCallback?: (value: string) => Promise<boolean>;
-}>();
+    value: string | null | undefined
+    onChangeCallback?: (value: string) => Promise<boolean>
+}>()
 const emit = defineEmits({
     change: (value: string) => true,
-});
-const visible = ref(false);
-const valueEdit = ref("");
+})
+const visible = ref(false)
+const valueEdit = ref('')
 const onVisibleChange = (visible: boolean) => {
     if (visible) {
-        valueEdit.value = props.value as string;
+        valueEdit.value = props.value as string
     }
-};
+}
 const doEnter = () => {
     nextTick(() => {
-        doConfirm();
-    });
-};
+        doConfirm()
+    })
+}
 const doConfirm = () => {
     if (props.onChangeCallback) {
         props.onChangeCallback(valueEdit.value).then((ok) => {
             if (ok) {
-                visible.value = false;
-                emit("change", valueEdit.value);
+                visible.value = false
+                emit('change', valueEdit.value)
             }
-        });
+        })
     } else {
-        emit("change", valueEdit.value);
+        emit('change', valueEdit.value)
         nextTick(() => {
-            visible.value = false;
-        });
+            visible.value = false
+        })
     }
-};
+}
 </script>
 
 <template>
@@ -46,7 +46,7 @@ const doConfirm = () => {
                     <a-input v-model="valueEdit" @pressEnter="doEnter">
                         <template #append>
                             <div class="cursor-pointer" @click="doConfirm">
-                                <icon-check/>
+                                <icon-check />
                             </div>
                         </template>
                     </a-input>

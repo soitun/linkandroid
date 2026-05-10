@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps} from "vue";
+import {defineProps} from 'vue'
 
 const props = defineProps({
     page: {
@@ -10,7 +10,7 @@ const props = defineProps({
         type: Number,
         default: 8,
     },
-});
+})
 </script>
 <template>
     <div class="py-10 text-center text-gray-400">
@@ -20,7 +20,7 @@ const props = defineProps({
         <div v-else>
             <a-spin style="--primary-6: #999" />
             <div class="text-sm">
-                {{ $t("status.loading") }}
+                {{ $t('status.loading') }}
             </div>
         </div>
     </div>

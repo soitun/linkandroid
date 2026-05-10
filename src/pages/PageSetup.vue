@@ -1,62 +1,61 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
-import {t} from "../lang";
-import {Dialog} from "../lib/dialog";
+import {computed, onMounted, ref} from 'vue'
+import {t} from '../lang'
+import {Dialog} from '../lib/dialog'
 
-
-const recordActiveIndex = ref(0);
+const recordActiveIndex = ref(0)
 const recordActive = computed(() => {
-    return records.value[recordActiveIndex.value] || null;
-});
+    return records.value[recordActiveIndex.value] || null
+})
 const records = ref<
     {
-        name: string;
-        title: string;
-        status: "success" | "fail";
-        desc: string;
+        name: string
+        title: string
+        status: 'success' | 'fail'
+        desc: string
         steps: {
-            title: string;
-            image: string;
-        }[];
+            title: string
+            image: string
+        }[]
     }[]
->([]);
+>([])
 
 onMounted(() => {
-    doLoad().then();
-    window.$mapi.app.windowHide("main");
-});
+    doLoad().then()
+    window.$mapi.app.windowHide('main')
+})
 
 const doLoad = async () => {
-    records.value = await window.$mapi.app.setupList();
-};
+    records.value = await window.$mapi.app.setupList()
+}
 
 const doOpen = async () => {
     if (!recordActive.value) {
-        return;
+        return
     }
-    window.$mapi.app.setupOpen(recordActive.value.name).then();
-};
+    window.$mapi.app.setupOpen(recordActive.value.name).then()
+}
 
 const doCheck = async () => {
-    await doLoad();
-    if (records.value[recordActiveIndex.value].status !== "success") {
-        return;
+    await doLoad()
+    if (records.value[recordActiveIndex.value].status !== 'success') {
+        return
     }
-    Dialog.tipSuccess(t("setup.congratulations", {title: records.value[recordActiveIndex.value].title}));
+    Dialog.tipSuccess(t('setup.congratulations', {title: records.value[recordActiveIndex.value].title}))
     // Auto navigate to next
-    let hasMore = false;
+    let hasMore = false
     for (let i = 0; i < records.value.length; i++) {
-        if (records.value[i].status === "fail") {
-            recordActiveIndex.value = i;
-            hasMore = true;
-            return;
+        if (records.value[i].status === 'fail') {
+            recordActiveIndex.value = i
+            hasMore = true
+            return
         }
     }
     if (!hasMore) {
-        await window.$mapi.app.toast(t("setup.allCompleted"));
-        await window.$mapi.app.restart();
+        await window.$mapi.app.toast(t('setup.allCompleted'))
+        await window.$mapi.app.restart()
     }
-};
+}
 </script>
 
 <template>
@@ -98,13 +97,13 @@ const doCheck = async () => {
                                 <template #icon>
                                     <icon-settings />
                                 </template>
-                                {{ $t("setup.openSettings") }}
+                                {{ $t('setup.openSettings') }}
                             </a-button>
                             <a-button type="primary" @click="doCheck">
                                 <template #icon>
                                     <icon-check />
                                 </template>
-                                {{ $t("setup.verifyComplete") }}
+                                {{ $t('setup.verifyComplete') }}
                             </a-button>
                         </div>
                     </div>

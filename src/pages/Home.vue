@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import Router from "../router";
+import {onMounted, ref} from 'vue'
+import Router from '../router'
 
-const loading = ref(true);
+const loading = ref(true)
 
 onMounted(async () => {
     // 模拟加载延迟，展示加载界面
     // await new Promise(resolve => setTimeout(resolve, 1000));
-    loading.value = false;
-    Router.push("/device");
-});
+    loading.value = false
+    Router.push('/device')
+})
 </script>
 
 <template>
@@ -21,12 +21,12 @@ onMounted(async () => {
         </div>
 
         <!-- Content State -->
-<!--        <div class="content-section" v-else>-->
-<!--            <div class="text-3xl font-bold mb-4">欢迎使用 {{ AppConfig.name }} !</div>-->
-<!--            <div class="empty-state">-->
-<!--                <p class="text-gray-400">主页内容区域</p>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="content-section" v-else>-->
+        <!--            <div class="text-3xl font-bold mb-4">欢迎使用 {{ AppConfig.name }} !</div>-->
+        <!--            <div class="empty-state">-->
+        <!--                <p class="text-gray-400">主页内容区域</p>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 </template>
 

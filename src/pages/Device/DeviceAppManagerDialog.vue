@@ -1,67 +1,72 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
-import {t} from "../../lang";
-import {Dialog} from "../../lib/dialog";
-import {DeviceRecord, EnumDeviceStatus} from "../../types/Device";
-import NameInfo from "./App/NameInfo.json";
-import DeviceAppIcon from "./DeviceAppIcon.vue";
-import DeviceAppInstallDialog from "./DeviceAppInstallDialog.vue";
+import {computed, ref} from 'vue'
+import {t} from '../../lang'
+import {Dialog} from '../../lib/dialog'
+import {DeviceRecord, EnumDeviceStatus} from '../../types/Device'
+import NameInfo from './App/NameInfo.json'
+import DeviceAppIcon from './DeviceAppIcon.vue'
+import DeviceAppInstallDialog from './DeviceAppInstallDialog.vue'
 
-const appInstallDialog = ref<InstanceType<typeof DeviceAppInstallDialog> | null>(null);
+type AppRecord = {
+    id: string
+    name: string
+}
 
-const visible = ref(false);
-const device = ref({} as DeviceRecord);
-const appRecords = ref([] as any[]);
-const searchKeywords = ref("");
+const appInstallDialog = ref<InstanceType<typeof DeviceAppInstallDialog> | null>(null)
+
+const visible = ref(false)
+const device = ref({} as DeviceRecord)
+const appRecords = ref<AppRecord[]>([])
+const searchKeywords = ref('')
 const show = (d: DeviceRecord) => {
     if (d.status !== EnumDeviceStatus.CONNECTED) {
-        Dialog.tipError(t("device.notConnected"));
-        return;
+        Dialog.tipError(t('device.notConnected'))
+        return
     }
-    device.value = d;
-    visible.value = true;
-    doRefresh().then();
-};
+    device.value = d
+    visible.value = true
+    doRefresh().then()
+}
 
 const filterAppRecords = computed(() => {
-    const keywords = searchKeywords.value.toLowerCase();
+    const keywords = searchKeywords.value.toLowerCase()
     if (!keywords) {
-        return appRecords.value;
+        return appRecords.value
     }
-    return appRecords.value.filter(a => {
-        return a.name.toLowerCase().includes(keywords) || a.id.toLowerCase().includes(keywords);
-    });
-});
+    return appRecords.value.filter((a) => {
+        return a.name.toLowerCase().includes(keywords) || a.id.toLowerCase().includes(keywords)
+    })
+})
 
 const doRefresh = async (isManual?: boolean) => {
-    const records = await window.$mapi.adb.listApps(device.value.id);
-    appRecords.value = records.map(r => {
+    const records = await window.$mapi.adb.listApps(device.value.id)
+    appRecords.value = records.map((r) => {
         return {
             id: r.id,
             name: NameInfo[r.id] || r.name,
-        };
-    });
+        }
+    })
     if (isManual) {
-        Dialog.tipSuccess(t("common.refresh") + t("common.success"));
+        Dialog.tipSuccess(t('common.refresh') + t('common.success'))
     }
-};
+}
 
-const doUninstall = async (app: any) => {
-    await Dialog.confirm(t("common.deleteConfirm"));
-    await window.$mapi.adb.uninstall(device.value.id, app.id);
-    await doRefresh();
-    Dialog.tipSuccess(t("device.uninstallSuccess"));
-};
+const doUninstall = async (app: AppRecord) => {
+    await Dialog.confirm(t('common.deleteConfirm'))
+    await window.$mapi.adb.uninstall(device.value.id, app.id)
+    await doRefresh()
+    Dialog.tipSuccess(t('device.uninstallSuccess'))
+}
 
 defineExpose({
     show,
-});
+})
 </script>
 
 <template>
     <a-modal v-model:visible="visible" width="80vw" :footer="false" title-align="start">
         <template #title>
-            {{ $t("device.appManagement") }}
+            {{ $t('device.appManagement') }}
         </template>
         <div style="height: 60vh; margin: -0.5rem" class="">
             <div class="flex flex-col h-full">
@@ -71,13 +76,13 @@ defineExpose({
                             <template #icon>
                                 <icon-plus />
                             </template>
-                            {{ $t("device.installApp") }}
+                            {{ $t('device.installApp') }}
                         </a-button>
                         <a-button @click="doRefresh(true)">
                             <template #icon>
                                 <icon-refresh />
                             </template>
-                            {{ $t("common.refresh") }}
+                            {{ $t('common.refresh') }}
                         </a-button>
                     </div>
                     <div>
@@ -98,7 +103,7 @@ defineExpose({
                             </div>
                             <div>
                                 <a-button @click="doUninstall(a)">
-                                    {{ $t("device.uninstall") }}
+                                    {{ $t('device.uninstall') }}
                                 </a-button>
                             </div>
                         </div>

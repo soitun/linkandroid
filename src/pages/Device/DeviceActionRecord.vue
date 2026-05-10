@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import {DeviceRecord} from "../../types/Device";
-import DeviceRecordDialog from "./DeviceRecordDialog.vue";
-import {ref} from "vue";
+import {DeviceRecord} from '../../types/Device'
+import DeviceRecordDialog from './DeviceRecordDialog.vue'
+import {ref} from 'vue'
 
-const recordDialog = ref<InstanceType<typeof DeviceRecordDialog>>();
+const recordDialog = ref<InstanceType<typeof DeviceRecordDialog>>()
 const props = defineProps<{
-    device: DeviceRecord;
-}>();
+    device: DeviceRecord
+}>()
 </script>
 
 <template>
     <a-tooltip :content="$t('device.record')">
         <a-button class="ml-1" @click="recordDialog?.show(props.device)">
             <template #icon>
-                <i class="iconfont icon-video text-gray-400"></i>
+                <i-mdi-video class="text-gray-400" />
             </template>
         </a-button>
     </a-tooltip>

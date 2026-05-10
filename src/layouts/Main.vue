@@ -1,40 +1,56 @@
 <script setup lang="ts">
-import {onBeforeMount, onMounted, ref} from "vue";
-import PageNav from "./../components/PageNav.vue";
-import {AppConfig} from "../config";
-import AppQuitConfirm from "../components/AppQuitConfirm.vue";
-import {useDragWindow} from "../components/common/dragWindow";
+import {onBeforeMount, ref} from 'vue'
+import {useRouter} from 'vue-router'
+import PageNav from './../components/PageNav.vue'
+import {AppConfig} from '../config'
+import AppQuitConfirm from '../components/AppQuitConfirm.vue'
+import {useDragWindow} from '../components/common/dragWindow'
+import {isDev} from '../lib/env'
+import {t} from '../lang'
 
-const appQuitConfirm = ref<InstanceType<typeof AppQuitConfirm> | null>(null);
-const isOsx = ref(false);
-const isFullscreen = ref(false);
+const router = useRouter()
+const appQuitConfirm = ref<InstanceType<typeof AppQuitConfirm> | null>(null)
+const isOsx = ref(false)
+const isFullscreen = ref(false)
 window.__page.onEnterFullScreen(() => {
-    isFullscreen.value = true;
-});
+    isFullscreen.value = true
+})
 window.__page.onLeaveFullScreen(() => {
-    isFullscreen.value = false;
-});
+    isFullscreen.value = false
+})
 window.__page.onShowQuitConfirmDialog(() => {
-    appQuitConfirm.value?.show();
-});
+    appQuitConfirm.value?.show()
+})
 
 const {onDragWindowMouseDown} = useDragWindow({
-    name: "main",
-    ignore: e => {
-        return !!(e.target && (e.target as any).tagName === "INPUT");
+    name: 'main',
+    ignore: (e) => {
+        return !!(e.target && (e.target as HTMLElement).tagName === 'INPUT')
     },
-});
+})
 const onDbClick = async () => {
-    await window.$mapi.app.windowMax();
-};
+    await window.$mapi.app.windowMax()
+}
 
 onBeforeMount(async () => {
-    isOsx.value = window.$mapi.app.isPlatform("osx");
-});
+    isOsx.value = window.$mapi.app.isPlatform('osx')
+})
 
 const doQuit = async () => {
-    await appQuitConfirm.value?.show();
-};
+    await appQuitConfirm.value?.show()
+}
+
+const debugVisible = ref(false)
+const currentRoute = ref('')
+const doDebugCopyRoute = async () => {
+    currentRoute.value = router.currentRoute.value.fullPath
+    await window.$mapi.app.setClipboardText(currentRoute.value)
+    window.$mapi.app.toast(t('common.copySuccess'), 'success')
+}
+const doDebugToggle = () => {
+    currentRoute.value = router.currentRoute.value.fullPath
+    debugVisible.value = !debugVisible.value
+}
 </script>
 <template>
     <div class="window-container">
@@ -59,16 +75,16 @@ const doQuit = async () => {
                     class="inline-block w-6 h-6 leading-6 cursor-pointer hover:text-primary mr-1"
                     @click="$mapi.app.windowMin()"
                 >
-                    <i class="iconfont text-sm icon-min"></i>
+                    <icon-minus class="text-sm" />
                 </div>
                 <div
                     class="inline-block w-6 h-6 leading-6 cursor-pointer hover:text-primary mr-1"
                     @click="$mapi.app.windowMax()"
                 >
-                    <i class="iconfont text-sm icon-max"></i>
+                    <icon-fullscreen class="text-sm" />
                 </div>
                 <div class="inline-block w-6 h-6 leading-6 cursor-pointer hover:text-red-500" @click="doQuit">
-                    <i class="iconfont text-sm icon-close"></i>
+                    <icon-close class="text-sm" />
                 </div>
             </div>
         </div>
@@ -84,4 +100,25 @@ const doQuit = async () => {
         </div>
     </div>
     <AppQuitConfirm ref="appQuitConfirm" />
+    <!-- 调试弹窗 -->
+    <template v-if="isDev">
+        <div class="fixed top-10 left-0 z-50">
+            <a-button shape="circle" size="mini" class="opacity-50 hover:opacity-100" @click="doDebugToggle">
+                <template #icon><icon-bug /></template>
+            </a-button>
+        </div>
+        <div
+            v-if="debugVisible"
+            class="fixed top-14 left-4 z-50 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-3 w-80"
+        >
+            <div class="font-bold text-sm mb-2">{{ $t('common.debugInfo') }}</div>
+            <div class="flex items-center gap-2">
+                <div class="text-xs text-gray-500 flex-grow truncate">{{ currentRoute }}</div>
+                <a-button size="mini" @click="doDebugCopyRoute">
+                    <template #icon><icon-copy /></template>
+                    {{ $t('common.copyRoute') }}
+                </a-button>
+            </div>
+        </div>
+    </template>
 </template>

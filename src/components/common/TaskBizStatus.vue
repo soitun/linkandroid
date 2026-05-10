@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import {computed} from "vue";
-import {t} from "../../lang";
+import {computed} from 'vue'
+import {t} from '../../lang'
 
 interface Props {
-    status: string | undefined;
-    statusMsg: string | undefined;
+    status: string | undefined
+    statusMsg: string | undefined
 }
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
 const statusColor = computed(() => {
     const colorMap = {
-        queue: "bg-gray-400",
-        wait: "bg-gray-400",
-        running: "bg-yellow-500",
-        success: "bg-green-500",
-        fail: "bg-red-500",
-    };
-    return colorMap[props.status as string] || "bg-gray-400";
-});
+        queue: 'bg-gray-400',
+        wait: 'bg-gray-400',
+        running: 'bg-yellow-500',
+        success: 'bg-green-500',
+        fail: 'bg-red-500',
+    }
+    return colorMap[props.status as string] || 'bg-gray-400'
+})
 
 const statusText = computed(() => {
     const textMap = {
-        queue: t("status.queuing"),
-        wait: t("status.waiting"),
-        running: t("status.running"),
-        success: t("common.success"),
-        fail: t("common.failed"),
-    };
-    return textMap[props.status as string] || "Unknown";
-});
+        queue: t('status.queuing'),
+        wait: t('status.waiting'),
+        running: t('status.running'),
+        success: t('common.success'),
+        fail: t('common.failed'),
+    }
+    return textMap[props.status as string] || 'Unknown'
+})
 </script>
 
 <template>

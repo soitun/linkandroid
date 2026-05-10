@@ -1,19 +1,19 @@
 <script setup lang="ts">
 interface LogItem {
-    num: number;
-    text: string;
+    num: number
+    text: string
 }
 
 const props = withDefaults(
     defineProps<{
-        logs: LogItem[];
-        height?: string;
+        logs: LogItem[]
+        height?: string
     }>(),
     {
         logs: [] as any,
-        height: "100%",
-    }
-);
+        height: '100%',
+    },
+)
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const props = withDefaults(
                 <i class="iconfont icon-empty-box text-4xl"></i>
             </div>
             <div class="text-xs mt-3">
-                {{ $t("empty.noLog") }}
+                {{ $t('empty.noLog') }}
             </div>
         </div>
         <div v-for="log in logs" class="text-white text-sm font-mono leading-6">

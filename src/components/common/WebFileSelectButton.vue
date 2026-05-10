@@ -2,18 +2,18 @@
 const props = defineProps({
     accept: {
         type: String,
-        default: "",
+        default: '',
     },
-});
+})
 const emit = defineEmits({
     selectFile: (file: File) => true,
-});
+})
 
 const onWebSelectFile = async (fileList, fileItem) => {
-    const file = fileItem.file;
-    emit("selectFile", file);
-    fileList.value = [];
-};
+    const file = fileItem.file
+    emit('selectFile', file)
+    fileList.value = []
+}
 </script>
 
 <template>

@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import android from "./App/Icon/android.svg";
-import {computed} from "vue";
+import android from './App/Icon/android.svg'
+import {computed} from 'vue'
 
 const images = {
     android,
-};
+}
 
 const props = withDefaults(
     defineProps<{
-        name: string;
-        size?: string;
+        name: string
+        size?: string
     }>(),
     {
         isFolder: false,
-        size: "100%",
-    }
-);
+        size: '100%',
+    },
+)
 
 const extSrc = computed(() => {
-    return images["android"];
-});
+    return images['android']
+})
 
 const extSrcUrl = computed(() => {
-    return `url("${extSrc.value}")`;
-});
+    return `url("${extSrc.value}")`
+})
 </script>
 
 <template>
@@ -38,7 +38,7 @@ const extSrcUrl = computed(() => {
     background-repeat: no-repeat;
 
     &:after {
-        content: "";
+        content: '';
         display: block;
         padding-top: 100%;
     }

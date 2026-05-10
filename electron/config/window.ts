@@ -10,10 +10,10 @@ export const WindowConfig = {
     paymentHeight: 400,
     aboutWidth: 500,
     aboutHeight: 400,
-    logWidth:800,
+    logWidth: 800,
     logHeight: 600,
     feedbackWidth: 700,
     feedbackHeight: 600,
     setupWidth: 800,
     setupHeight: 540,
-};
+}

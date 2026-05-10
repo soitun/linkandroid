@@ -1,93 +1,91 @@
 <script setup lang="ts">
-import {FitAddon} from "@xterm/addon-fit";
-import {Terminal} from "@xterm/xterm";
-import "@xterm/xterm/css/xterm.css";
-import {nextTick, ref, watch} from "vue";
-import {t} from "../../lang";
-import {Dialog} from "../../lib/dialog";
-import {DeviceRecord, EnumDeviceStatus} from "../../types/Device";
+import {FitAddon} from '@xterm/addon-fit'
+import {Terminal} from '@xterm/xterm'
+import '@xterm/xterm/css/xterm.css'
+import {nextTick, ref, watch} from 'vue'
+import {t} from '../../lang'
+import {Dialog} from '../../lib/dialog'
+import {DeviceRecord, EnumDeviceStatus} from '../../types/Device'
 
-const visible = ref(false);
-const device = ref<DeviceRecord | null>(null);
-const terminal = ref<Element | null>(null);
+const visible = ref(false)
+const device = ref<DeviceRecord | null>(null)
+const terminal = ref<Element | null>(null)
 
-let term = null as any;
-let shellController = null as any;
+let term = null as any
+let shellController = null as any
 watch(
     () => visible.value,
-    async v => {
+    async (v) => {
         if (v) {
             term = new Terminal({
                 fontSize: 14,
                 cursorBlink: true,
-                cursorStyle: "underline",
+                cursorStyle: 'underline',
                 cols: 80,
                 rows: 10,
                 // logLevel: 'trace',
                 convertEol: true,
-            });
-            term.onData(data => {
-                if (data === "\r") {
+            })
+            term.onData((data) => {
+                if (data === '\r') {
                     // 发送回车
-                    shellController.send("\r\n");
+                    shellController.send('\r\n')
                 } else {
-                    shellController.send(data);
+                    shellController.send(data)
                 }
-            });
-            const fitAddon = new FitAddon();
-            term.loadAddon(fitAddon);
-            term.open(terminal.value as HTMLElement);
-            term.clear();
-            term.writeln(t("device.enterCommandLine", {id: device.value?.id}));
-            term.writeln("==========================================");
+            })
+            const fitAddon = new FitAddon()
+            term.loadAddon(fitAddon)
+            term.open(terminal.value as HTMLElement)
+            term.clear()
+            term.writeln(t('device.enterCommandLine', {id: device.value?.id}))
+            term.writeln('==========================================')
             nextTick(() => {
-                fitAddon.fit();
-                term.focus();
-            });
-            shellController = await window.$mapi.adb.spawnShell([
-                "-s", device.value?.id as string, "shell", "-tt"
-            ], {
-                stdout: data => {
+                fitAddon.fit()
+                term.focus()
+            })
+            shellController = await window.$mapi.adb.spawnShell(['-s', device.value?.id as string, 'shell', '-tt'], {
+                stdout: (data) => {
                     // console.log('stdout', JSON.stringify(data))
-                    term.write(data);
+                    term.write(data)
                 },
-                stderr: data => {
+                stderr: (data) => {
                     // console.log('stdout', JSON.stringify(data))
-                    term.write(data);
+                    term.write(data)
                 },
-                success: data => {
+                success: (data) => {
                     // console.log('success', data)
                     nextTick(() => {
-                        visible.value = false;
-                    });
+                        visible.value = false
+                    })
                 },
                 error: (data, code) => {
                     // console.log('error', code, data)
                 },
-            });
+            })
         } else {
-            term && term.dispose();
-            shellController?.stop();
+            term && term.dispose()
+            shellController?.stop()
         }
-    }
-);
+    },
+)
 const show = (d: DeviceRecord) => {
     if (d.status !== EnumDeviceStatus.CONNECTED) {
-        Dialog.tipError(t("device.notConnected"));
-        return;
+        Dialog.tipError(t('device.notConnected'))
+        return
     }
-    device.value = d;
-    visible.value = true;
-};
+    device.value = d
+    visible.value = true
+}
 defineExpose({
     show,
-});
+})
 </script>
 
 <template>
     <a-modal v-model:visible="visible" width="50rem" :footer="false" title-align="start">
         <template #title>
-            {{ $t("device.commandLineTitle", {id: device?.id}) }}
+            {{ $t('device.commandLineTitle', {id: device?.id}) }}
         </template>
         <div style="margin: -0.8rem; border-radius: 0.5rem; overflow: hidden; background: #000">
             <div class="h-full p-2 overflow-hidden">

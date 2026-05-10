@@ -1,87 +1,86 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import InputInlineEditor from "../../components/common/InputInlineEditor.vue";
-import { t } from "../../lang";
-import { Dialog } from "../../lib/dialog";
-import { mapError } from "../../lib/error";
-import { useDeviceStore } from "../../store/modules/device";
-import { DeviceRecord, EnumDeviceStatus, EnumDeviceType } from "../../types/Device";
-import DeviceActionApp from "./DeviceActionApp.vue";
-import DeviceActionConnect from "./DeviceActionConnect.vue";
-import DeviceActionDisconnect from "./DeviceActionDisconnect.vue";
-import DeviceActionMirror from "./DeviceActionMirror.vue";
-import DeviceActionMirrorCamera from "./DeviceActionMirrorCamera.vue";
-import DeviceActionMirrorOTG from "./DeviceActionMirrorOTG.vue";
-import DeviceActionRecord from "./DeviceActionRecord.vue";
-import DeviceActionScreenshot from "./DeviceActionScreenshot.vue";
-import DeviceActionWifiOff from "./DeviceActionWifiOff.vue";
-import DeviceActionWifiOn from "./DeviceActionWifiOn.vue";
-import DeviceStatus from "./DeviceStatus.vue";
-import DeviceType from "./DeviceType.vue";
+import {computed, ref} from 'vue'
+import InputInlineEditor from '../../components/common/InputInlineEditor.vue'
+import {t} from '../../lang'
+import {Dialog} from '../../lib/dialog'
+import {mapError} from '../../lib/error'
+import {useDeviceStore} from '../../store/modules/device'
+import {DeviceRecord, EnumDeviceStatus, EnumDeviceType} from '../../types/Device'
+import DeviceActionApp from './DeviceActionApp.vue'
+import DeviceActionConnect from './DeviceActionConnect.vue'
+import DeviceActionDisconnect from './DeviceActionDisconnect.vue'
+import DeviceActionMirror from './DeviceActionMirror.vue'
+import DeviceActionMirrorCamera from './DeviceActionMirrorCamera.vue'
+import DeviceActionMirrorOTG from './DeviceActionMirrorOTG.vue'
+import DeviceActionRecord from './DeviceActionRecord.vue'
+import DeviceActionScreenshot from './DeviceActionScreenshot.vue'
+import DeviceActionWifiOff from './DeviceActionWifiOff.vue'
+import DeviceActionWifiOn from './DeviceActionWifiOn.vue'
+import DeviceStatus from './DeviceStatus.vue'
+import DeviceType from './DeviceType.vue'
 
 const props = defineProps<{
     record: DeviceRecord
-}>();
+}>()
 
 const emit = defineEmits<{
-    (e: "setting"): void,
-    (e: "file-manager"): void,
-    (e: "adbShell"): void,
-}>();
+    (e: 'setting'): void
+    (e: 'file-manager'): void
+    (e: 'adbShell'): void
+}>()
 
-const actionMirror = ref<InstanceType<typeof DeviceActionMirror> | null>(null);
+const actionMirror = ref<InstanceType<typeof DeviceActionMirror> | null>(null)
 
-const deviceStore = useDeviceStore();
+const deviceStore = useDeviceStore()
 
 const rIndex = computed(() => {
-    return deviceStore.records.findIndex(r => r.id === props.record.id);
-});
+    return deviceStore.records.findIndex((r) => r.id === props.record.id)
+})
 
 const doDelete = async (device: DeviceRecord) => {
-    Dialog.confirm(t("device.deleteConfirm")).then(async () => {
-        Dialog.loadingOn(t("device.deleting"));
+    Dialog.confirm(t('device.deleteConfirm')).then(async () => {
+        Dialog.loadingOn(t('device.deleting'))
         try {
-            await deviceStore.delete(device);
-            Dialog.tipSuccess(t("device.deleteSuccess"));
+            await deviceStore.delete(device)
+            Dialog.tipSuccess(t('device.deleteSuccess'))
         } catch (e) {
-            Dialog.tipError(mapError(e));
+            Dialog.tipError(mapError(e))
         } finally {
-            Dialog.loadingOff();
+            Dialog.loadingOff()
         }
-    });
-};
+    })
+}
 
 const onEditName = async (device: DeviceRecord, name: string) => {
     try {
-        await deviceStore.edit(device, {name});
-        Dialog.tipSuccess(t("device.editSuccess"));
+        await deviceStore.edit(device, {name})
+        Dialog.tipSuccess(t('device.editSuccess'))
     } catch (e) {
-        Dialog.tipError(mapError(e));
+        Dialog.tipError(mapError(e))
     }
-};
+}
 </script>
 
 <template>
-
     <div
         class="hover:shadow-lg bg-white dark:bg-gray-800 shadow border border-solid border-gray-100 dark:border-gray-800 rounded-lg flex flex-col p-1"
     >
         <div class="flex overflow-hidden flex-shrink-0 items-center h-8 py-0">
             <div class="overflow-hidden">
                 <div class="truncate cursor-pointer">
-                    <DeviceType :type="record.type"/>
+                    <DeviceType :type="record.type" />
                     <span>{{ record.name }}</span>
                 </div>
             </div>
             <div class="flex-grow">
                 <InputInlineEditor :value="record.name" @change="onEditName(record, $event)">
                     <a class="ml-1 text-gray-400" href="javascript:;">
-                        <icon-pen/>
+                        <icon-pen />
                     </a>
                 </InputInlineEditor>
             </div>
             <div class="w-16 flex-shrink-0 text-right">
-                <DeviceStatus :status="record.status"/>
+                <DeviceStatus :status="record.status" />
             </div>
         </div>
         <div class="flex">
@@ -89,14 +88,17 @@ const onEditName = async (device: DeviceRecord, name: string) => {
                 <a-tooltip :content="$t('device.mirrorToComputer')">
                     <div
                         @click="actionMirror?.start()"
-                        class="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                        <div class="cursor-pointer border-4 overflow-hidden border-solid border-black bg-black rounded-lg shadow-2xl">
+                        class="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                    >
+                        <div
+                            class="cursor-pointer border-4 overflow-hidden border-solid border-black bg-black rounded-lg shadow-2xl"
+                        >
                             <div v-if="record.screenshot && record.runtime?.previewImage === 'yes'">
-                                <img :src="record.screenshot" class="max-h-60 max-w-36 rounded-sm"/>
+                                <img :src="record.screenshot" class="max-h-60 max-w-36 rounded-sm" />
                             </div>
                             <div v-else class="w-32 h-60 bg-gray-200 text-xs text-gray-300 flex rounded-sm">
                                 <div class="m-auto">
-                                    <icon-eye class="text-2xl"/>
+                                    <icon-eye class="text-2xl" />
                                 </div>
                             </div>
                         </div>
@@ -104,50 +106,49 @@ const onEditName = async (device: DeviceRecord, name: string) => {
                 </a-tooltip>
             </div>
             <div class="flex-shrink-0 flex flex-col p-0 gap-1 w-9">
-                <DeviceActionMirror ref="actionMirror" :device="record"/>
-                <DeviceActionApp :device="record"/>
-                <DeviceActionScreenshot :device="record"/>
-                <DeviceActionRecord :device="record"/>
+                <DeviceActionMirror ref="actionMirror" :device="record" />
+                <DeviceActionApp :device="record" />
+                <DeviceActionScreenshot :device="record" />
+                <DeviceActionRecord :device="record" />
                 <a-tooltip :content="$t('device.fileManager')">
                     <a-button class="ml-1" @click="emit('file-manager')">
                         <template #icon>
-                            <icon-folder class="text-gray-400"/>
+                            <icon-folder class="text-gray-400" />
                         </template>
                     </a-button>
                 </a-tooltip>
                 <a-dropdown trigger="hover" :popup-max-height="false">
                     <a-button class="ml-1">
                         <template #icon>
-                            <icon-settings class="text-gray-400"/>
+                            <icon-settings class="text-gray-400" />
                         </template>
                     </a-button>
                     <template #content>
                         <DeviceActionDisconnect
-                            v-if="record.type === EnumDeviceType.WIFI &&record.status === EnumDeviceStatus.CONNECTED"
+                            v-if="record.type === EnumDeviceType.WIFI && record.status === EnumDeviceStatus.CONNECTED"
                             :device="record"
                         />
                         <DeviceActionConnect
-                            v-if="record.type === EnumDeviceType.WIFI &&record.status === EnumDeviceStatus.DISCONNECTED"
+                            v-if="
+                                record.type === EnumDeviceType.WIFI && record.status === EnumDeviceStatus.DISCONNECTED
+                            "
                             :device="record"
                         />
-                        <DeviceActionWifiOn v-if="record.type === EnumDeviceType.USB" :device="record"/>
-                        <DeviceActionWifiOff v-if="record.type === EnumDeviceType.WIFI" :device="record"/>
-                        <DeviceActionMirrorCamera :device="record"/>
-                        <DeviceActionMirrorOTG v-if="record.type === EnumDeviceType.USB" :device="record"/>
+                        <DeviceActionWifiOn v-if="record.type === EnumDeviceType.USB" :device="record" />
+                        <DeviceActionWifiOff v-if="record.type === EnumDeviceType.WIFI" :device="record" />
+                        <DeviceActionMirrorCamera :device="record" />
+                        <DeviceActionMirrorOTG v-if="record.type === EnumDeviceType.USB" :device="record" />
                         <a-doption @click="emit('adbShell')">
-                            {{ $t("device.commandLine") }}
+                            {{ $t('device.commandLine') }}
                         </a-doption>
                         <a-doption v-if="rIndex > 0" @click="deviceStore.doTop(rIndex)">
-                            {{ $t("device.pinTop") }}
+                            {{ $t('device.pinTop') }}
                         </a-doption>
                         <a-doption @click="emit('setting')">
-                            {{ $t("device.settings") }}
+                            {{ $t('device.settings') }}
                         </a-doption>
-                        <a-doption
-                            v-if="record.status === EnumDeviceStatus.DISCONNECTED"
-                            @click="doDelete(record)"
-                        >
-                            {{ $t("device.delete") }}
+                        <a-doption v-if="record.status === EnumDeviceStatus.DISCONNECTED" @click="doDelete(record)">
+                            {{ $t('device.delete') }}
                         </a-doption>
                     </template>
                 </a-dropdown>

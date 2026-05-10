@@ -1,45 +1,45 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { t } from "../../lang";
-import { Dialog } from "../../lib/dialog";
+import {ref} from 'vue'
+import {t} from '../../lang'
+import {Dialog} from '../../lib/dialog'
 
-const visible = ref(false);
+const visible = ref(false)
 const formData = ref({
-    host: "",
-    port: "",
-});
+    host: '',
+    port: '',
+})
 const show = () => {
-    visible.value = true;
-};
+    visible.value = true
+}
 const emit = defineEmits({
     update: () => true,
-});
+})
 const doSubmit = async () => {
-    Dialog.loadingOn(t("device.testConnecting"));
+    Dialog.loadingOn(t('device.testConnecting'))
     try {
-        await window.$mapi.adb.connect(formData.value.host, parseInt(formData.value.port || "5555"));
-        Dialog.tipSuccess(t("device.connectSuccessShort"));
-        visible.value = false;
-        emit("update");
+        await window.$mapi.adb.connect(formData.value.host, parseInt(formData.value.port || '5555'))
+        Dialog.tipSuccess(t('device.connectSuccessShort'))
+        visible.value = false
+        emit('update')
     } catch (e) {
-        Dialog.tipError(t("device.connectFailedShort"));
+        Dialog.tipError(t('device.connectFailedShort'))
     } finally {
-        Dialog.loadingOff();
+        Dialog.loadingOff()
     }
-};
+}
 defineExpose({
     show,
-});
+})
 </script>
 
 <template>
     <a-modal v-model:visible="visible" width="40rem" title-align="start">
         <template #title>
-            {{ $t("device.connectNetwork") }}
+            {{ $t('device.connectNetwork') }}
         </template>
         <template #footer>
             <a-button type="primary" @click="doSubmit">
-                {{ $t("device.connect") }}
+                {{ $t('device.connect') }}
             </a-button>
         </template>
         <div>

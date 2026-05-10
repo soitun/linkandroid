@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { Package, Settings, Trash2 } from "lucide-vue-next";
-import { t } from "../../lang";
-import { LibItem } from "./types";
+import {Package, Settings, Trash2} from 'lucide-vue-next'
+import {t} from '../../lang'
+import {LibItem} from './types'
 
 const props = defineProps<{
-    item: LibItem;
-}>();
+    item: LibItem
+}>()
 
 const emit = defineEmits<{
-    (e: 'setting', item: LibItem): void;
-    (e: 'delete', item: LibItem): void;
-}>();
+    (e: 'setting', item: LibItem): void
+    (e: 'delete', item: LibItem): void
+}>()
 </script>
 
 <template>
@@ -28,10 +28,10 @@ const emit = defineEmits<{
                 <div>
                     <div class="font-semibold text-lg mb-1">{{ item.name }}</div>
                     <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                        {{ t("page.lib.version") }}: {{ item.version }}
+                        {{ t('page.lib.version') }}: {{ item.version }}
                     </div>
                     <div class="text-sm text-gray-500 dark:text-gray-500">
-                        {{ t("page.lib.path") }}: {{ item.path }}
+                        {{ t('page.lib.path') }}: {{ item.path }}
                     </div>
                 </div>
             </div>
@@ -42,13 +42,13 @@ const emit = defineEmits<{
                     <template #icon>
                         <Settings class="w-4 h-4" />
                     </template>
-                    {{ t("page.lib.settings") }}
+                    {{ t('page.lib.settings') }}
                 </a-button>
                 <a-button status="danger" @click="emit('delete', item)">
                     <template #icon>
                         <Trash2 class="w-4 h-4" />
                     </template>
-                    {{ t("page.lib.delete") }}
+                    {{ t('page.lib.delete') }}
                 </a-button>
             </div>
         </div>
