@@ -38,8 +38,7 @@ biz ui:
 dev-seed:
 	npx tsx test/dev-seed.ts
 dev:
-	npm run dev
-
+    npm run dev:mac
 publish:
 	$(MAKE) build-cli
 	ss-publish publish ../linkandroid

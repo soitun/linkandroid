@@ -28,6 +28,12 @@ jobs:
         with:
           node-version: 20
 
+      - name: Build Prepare (Linux)
+        if: runner.os == 'Linux'
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y build-essential pkg-config
+
       - name: Build Prepare (macOS)
         if: runner.os == 'macOS'
         run: |
@@ -60,8 +66,20 @@ jobs:
             echo "find-identity"
             security find-identity -p codesigning
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install Dependencies (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: |
+            npm install --ignore-scripts
+            rm -rf node_modules/canvas
+            npx electron-builder install-app-deps
+
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+            npm install --ignore-scripts
+            if (Test-Path node_modules\canvas) { Remove-Item -Recurse -Force node_modules\canvas }
+            npx electron-builder install-app-deps
 
       - name: init ( Windows )
         if: runner.os == 'Windows'
