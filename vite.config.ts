@@ -22,7 +22,7 @@ export default defineConfig(({command}) => {
 
     const isServe = command === "serve";
     const isBuild = command === "build";
-    const sourcemap = isServe || !!process.env.VSCODE_DEBUG;
+    const sourcemap = isServe || !!process.env.VSCODE_DEBUG ? true : 'hidden';
     const minify = isBuild && !process.env.VSCODE_DEBUG;
 
     const buildId = dayjs().tz("Asia/Shanghai").format("YYYYMMDDHHmmss");
